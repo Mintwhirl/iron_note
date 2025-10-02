@@ -14,9 +14,12 @@ A **minimal, fast, offline-first PWA** for tracking workouts at the gym. Built f
 - ✅ **Exercise Library** – 47 pre-populated exercises across 5 categories (Chest, Back, Shoulders, Legs, Core)
 - ✅ **Set Logging** – Log 1-5 sets per exercise with reps + weight (lbs)
 - ✅ **Optional Notes** – Add notes per exercise after completion
-- ✅ **Workout History** – View past workouts by date
+- ✅ **Workout History** – View past workouts by date with detailed breakdowns
 - ✅ **CSV Export** – Export individual or all workouts
 - ✅ **Completion Summary** – Stats and review after ending a workout
+- ✅ **Delete Individual Exercises** – Tap any exercise in history to delete it
+- ✅ **Delete All Workouts** – Clear entire history with type-to-confirm + 5-tap verification
+- ✅ **Privacy First** – All data stored locally, nothing collected or transmitted
 
 ### Design Principles
 - 🎨 **Dark Mode Default** – Optimized for gym lighting
@@ -52,7 +55,9 @@ iron_note/
 │   │   │   ├── common/          # Reusable UI components
 │   │   │   │   ├── Button.svelte
 │   │   │   │   ├── Card.svelte
-│   │   │   │   └── Modal.svelte
+│   │   │   │   ├── Modal.svelte
+│   │   │   │   ├── DeleteExerciseConfirmation.svelte
+│   │   │   │   └── DeleteAllConfirmation.svelte
 │   │   │   ├── workout/         # Workout-specific components
 │   │   │   │   ├── ExerciseSelector.svelte
 │   │   │   │   ├── SetLogger.svelte
@@ -133,18 +138,22 @@ npm run preview
 
 3. **End Workout**
    - Tap "End Workout" button
-   - View completion summary
-   - Summary persists until next workout starts
+   - View completion summary with stats
+   - Tap "Return to Home" to reset to blank home screen
 
-4. **Multiple Workouts Per Day**
-   - After completion, tap "Start Another Workout"
-   - New session begins, previous data saved
-
-5. **View History**
+4. **View History**
    - Tap "History" in bottom nav
    - Browse past workouts by date
-   - Tap workout to see details
+   - Tap workout to see detailed breakdown
    - Export individual workout to CSV
+
+5. **Manage History**
+   - **Delete Exercise**: Tap any exercise name in workout details
+   - Confirm deletion in popup dialog
+   - Empty workout days auto-removed from history
+   - **Delete All**: Tap "Delete All" button
+   - Type "delete everything" to confirm
+   - Tap delete button 5 times to permanently clear all data
 
 ---
 
@@ -199,6 +208,7 @@ Gym environments typically have bright overhead lighting. Dark mode reduces glar
 
 - PWA icons are currently placeholders (need proper 192x192 and 512x512 PNGs)
 - No data migration strategy yet (if schema changes)
+- UI optimized for iPhone - desktop experience may vary
 
 ---
 
@@ -235,4 +245,11 @@ For issues or questions:
 
 ---
 
-**Made with 💪 for real gym use.**
+## 🔒 Privacy
+
+All data is stored locally on your device using IndexedDB. **Nothing is collected, transmitted, or stored on external servers.** Your workout data never leaves your phone.
+
+---
+
+**Made by Kevin Stewart © 2025**
+**Built with 💪 for real gym use.**
