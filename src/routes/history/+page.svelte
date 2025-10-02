@@ -75,19 +75,20 @@
 <div class="page">
 	<div class="header">
 		<h1>History</h1>
-		{#if hasWorkouts}
-			<div class="header-actions">
-				<Button variant="secondary" on:click={handleExportAll}>
-					<DownloadIcon size={20} />
-					Export All
-				</Button>
-				<Button variant="danger" on:click={handleDeleteAllClick}>
-					<TrashIcon size={20} />
-					Delete All
-				</Button>
-			</div>
-		{/if}
 	</div>
+
+	{#if hasWorkouts}
+		<div class="header-actions">
+			<Button variant="secondary" size="sm" on:click={handleExportAll}>
+				<DownloadIcon size={18} />
+				<span class="button-text">Export All</span>
+			</Button>
+			<Button variant="danger" size="sm" on:click={handleDeleteAllClick}>
+				<TrashIcon size={18} />
+				<span class="button-text">Delete All</span>
+			</Button>
+		</div>
+	{/if}
 
 	{#if !hasWorkouts}
 		<div class="empty-state">
@@ -132,12 +133,17 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: var(--space-md);
 	}
 
 	.header-actions {
-		display: flex;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
 		gap: var(--space-sm);
+		width: 100%;
+	}
+
+	.button-text {
+		white-space: nowrap;
 	}
 
 	.header h1 {

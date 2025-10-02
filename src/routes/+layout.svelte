@@ -24,6 +24,11 @@
 		<slot />
 	</main>
 
+	<footer class="app-footer">
+		<p>Made by Kevin Stewart © 2025</p>
+		<p class="privacy-note">All data stored locally on your device • Nothing collected or transmitted</p>
+	</footer>
+
 	<nav class="bottom-nav">
 		<a href="/" class="nav-item" class:active={isHomePage} aria-label="Workout">
 			<AddIcon size={28} />
@@ -34,11 +39,6 @@
 			<span>History</span>
 		</a>
 	</nav>
-
-	<footer class="app-footer">
-		<p>Made by Kevin Stewart © 2025</p>
-		<p class="privacy-note">All data stored locally on your device • Nothing collected or transmitted</p>
-	</footer>
 </div>
 
 <style>
@@ -96,27 +96,22 @@
 	}
 
 	.app-footer {
-		position: fixed;
-		bottom: 80px;
-		left: 0;
-		right: 0;
-		padding: var(--space-sm) var(--space-md);
+		padding: var(--space-lg) var(--space-md);
+		padding-bottom: var(--space-sm);
 		text-align: center;
-		background: transparent;
-		pointer-events: none;
-		z-index: 50;
+		background: var(--bg-primary);
 	}
 
 	.app-footer p {
 		margin: 0;
 		font-size: 0.625rem;
 		color: var(--text-tertiary);
-		opacity: 0.6;
+		opacity: 0.7;
 		line-height: 1.4;
 	}
 
 	.privacy-note {
 		font-size: 0.5625rem;
-		margin-top: 2px;
+		margin-top: var(--space-xs);
 	}
 </style>

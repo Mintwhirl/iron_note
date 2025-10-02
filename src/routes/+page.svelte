@@ -83,7 +83,7 @@
 	$: hasCompletedExercises = todayWorkout && todayWorkout.exercises.length > 0;
 	$: workoutCompleted = todayWorkout && !todayWorkout.isActive && hasCompletedExercises;
 	$: workoutInProgress = todayWorkout && todayWorkout.isActive;
-	$: workoutNotStarted = todayWorkout && !todayWorkout.isActive && !hasCompletedExercises;
+	$: workoutNotStarted = !todayWorkout || (todayWorkout && !todayWorkout.isActive && !hasCompletedExercises);
 </script>
 
 <div class="page">
