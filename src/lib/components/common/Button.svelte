@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let variant: 'primary' | 'secondary' | 'ghost' = 'primary';
+	export let variant: 'primary' | 'secondary' | 'ghost' | 'danger' = 'primary';
 	export let size: 'sm' | 'md' | 'lg' = 'md';
 	export let fullWidth: boolean = false;
 	export let disabled: boolean = false;
@@ -74,6 +74,19 @@
 	.btn-ghost:hover:not(:disabled) {
 		background: var(--bg-secondary);
 		color: var(--text-primary);
+	}
+
+	.btn-danger {
+		background: #dc2626;
+		color: white;
+	}
+
+	.btn-danger:hover:not(:disabled) {
+		background: #b91c1c;
+	}
+
+	.btn-danger:active:not(:disabled) {
+		background: #991b1b;
 	}
 
 	/* Sizes */

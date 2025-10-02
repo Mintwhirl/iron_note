@@ -2,15 +2,42 @@
 	import type { Workout } from '$lib/types';
 	import Modal from '../common/Modal.svelte';
 	import Button from '../common/Button.svelte';
+	import DeleteExerciseConfirmation from '../common/DeleteExerciseConfirmation.svelte';
 	import DownloadIcon from '../icons/DownloadIcon.svelte';
 	import { exportWorkoutToCSV } from '$lib/utils/export';
+	import { deleteExerciseFromWorkout } from '$lib/db/workout-db';
 
 	export let workout: Workout;
 	export let isOpen: boolean;
 	export let onClose: () => void;
+	export let onExerciseDeleted: () => void;
+
+	let showDeleteConfirmation = false;
+	let selectedExerciseId = '';
+	let selectedExerciseName = '';
 
 	function handleExport() {
 		exportWorkoutToCSV(workout);
+	}
+
+	function handleExerciseClick(exerciseId: string, exerciseName: string) {
+		selectedExerciseId = exerciseId;
+		selectedExerciseName = exerciseName;
+		showDeleteConfirmation = true;
+	}
+
+	async function confirmDeleteExercise() {
+		await deleteExerciseFromWorkout(workout.id, selectedExerciseId);
+		showDeleteConfirmation = false;
+		selectedExerciseId = '';
+		selectedExerciseName = '';
+		onExerciseDeleted();
+	}
+
+	function cancelDeleteExercise() {
+		showDeleteConfirmation = false;
+		selectedExerciseId = '';
+		selectedExerciseName = '';
 	}
 </script>
 
@@ -20,7 +47,12 @@
 			<div class="exercise-section">
 				<div class="exercise-header">
 					<span class="category">{exercise.category}</span>
-					<h3 class="exercise-name">{exercise.exerciseName}</h3>
+					<button
+						class="exercise-name-btn"
+						on:click={() => handleExerciseClick(exercise.id, exercise.exerciseName)}
+					>
+						<h3 class="exercise-name">{exercise.exerciseName}</h3>
+					</button>
 				</div>
 
 				<div class="sets-table">
@@ -56,6 +88,13 @@
 	</div>
 </Modal>
 
+<DeleteExerciseConfirmation
+	isOpen={showDeleteConfirmation}
+	exerciseName={selectedExerciseName}
+	onConfirm={confirmDeleteExercise}
+	onCancel={cancelDeleteExercise}
+/>
+
 <style>
 	.workout-details {
 		display: flex;
@@ -88,6 +127,23 @@
 		color: var(--text-tertiary);
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
+	}
+
+	.exercise-name-btn {
+		width: 100%;
+		text-align: left;
+		padding: var(--space-sm);
+		border-radius: var(--radius-md);
+		transition: background 0.15s ease;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	.exercise-name-btn:hover {
+		background: var(--bg-tertiary);
+	}
+
+	.exercise-name-btn:active {
+		transform: scale(0.98);
 	}
 
 	.exercise-name {

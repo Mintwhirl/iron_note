@@ -1,35 +1,72 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { getAllWorkouts } from '$lib/db/workout-db';
+	import { getAllWorkouts, deleteAllWorkouts } from '$lib/db/workout-db';
 	import { exportAllWorkoutsToCSV } from '$lib/utils/export';
 	import type { Workout } from '$lib/types';
 	import WorkoutCard from '$lib/components/history/WorkoutCard.svelte';
 	import WorkoutDetails from '$lib/components/history/WorkoutDetails.svelte';
+	import DeleteAllConfirmation from '$lib/components/common/DeleteAllConfirmation.svelte';
 	import Button from '$lib/components/common/Button.svelte';
 	import DownloadIcon from '$lib/components/icons/DownloadIcon.svelte';
+	import TrashIcon from '$lib/components/icons/TrashIcon.svelte';
 
 	let workouts: Workout[] = [];
 	let selectedWorkout: Workout | null = null;
 	let showDetails = false;
+	let showDeleteAllConfirmation = false;
 
 	onMount(async () => {
 		workouts = await getAllWorkouts();
 	});
+
+	async function refreshWorkouts() {
+		workouts = await getAllWorkouts();
+	}
 
 	function handleSelectWorkout(workout: Workout) {
 		selectedWorkout = workout;
 		showDetails = true;
 	}
 
-	function handleCloseDetails() {
+	async function handleCloseDetails() {
 		showDetails = false;
 		selectedWorkout = null;
+		await refreshWorkouts();
+	}
+
+	async function handleExerciseDeleted() {
+		await refreshWorkouts();
+		// If the selected workout no longer exists (all exercises deleted), close the details
+		const workoutStillExists = workouts.find(w => w.id === selectedWorkout?.id);
+		if (!workoutStillExists) {
+			showDetails = false;
+			selectedWorkout = null;
+		} else {
+			// Update the selected workout with fresh data
+			selectedWorkout = workoutStillExists;
+		}
 	}
 
 	function handleExportAll() {
 		if (workouts.length > 0) {
 			exportAllWorkoutsToCSV(workouts);
 		}
+	}
+
+	function handleDeleteAllClick() {
+		showDeleteAllConfirmation = true;
+	}
+
+	async function confirmDeleteAll() {
+		await deleteAllWorkouts();
+		await refreshWorkouts();
+		showDeleteAllConfirmation = false;
+		showDetails = false;
+		selectedWorkout = null;
+	}
+
+	function cancelDeleteAll() {
+		showDeleteAllConfirmation = false;
 	}
 
 	$: hasWorkouts = workouts.length > 0;
@@ -39,10 +76,16 @@
 	<div class="header">
 		<h1>History</h1>
 		{#if hasWorkouts}
-			<Button variant="secondary" on:click={handleExportAll}>
-				<DownloadIcon size={20} />
-				Export All
-			</Button>
+			<div class="header-actions">
+				<Button variant="secondary" on:click={handleExportAll}>
+					<DownloadIcon size={20} />
+					Export All
+				</Button>
+				<Button variant="danger" on:click={handleDeleteAllClick}>
+					<TrashIcon size={20} />
+					Delete All
+				</Button>
+			</div>
 		{/if}
 	</div>
 
@@ -61,8 +104,19 @@
 </div>
 
 {#if selectedWorkout}
-	<WorkoutDetails workout={selectedWorkout} isOpen={showDetails} onClose={handleCloseDetails} />
+	<WorkoutDetails
+		workout={selectedWorkout}
+		isOpen={showDetails}
+		onClose={handleCloseDetails}
+		onExerciseDeleted={handleExerciseDeleted}
+	/>
 {/if}
+
+<DeleteAllConfirmation
+	isOpen={showDeleteAllConfirmation}
+	onConfirm={confirmDeleteAll}
+	onCancel={cancelDeleteAll}
+/>
 
 <style>
 	.page {
@@ -79,6 +133,11 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: var(--space-md);
+	}
+
+	.header-actions {
+		display: flex;
+		gap: var(--space-sm);
 	}
 
 	.header h1 {

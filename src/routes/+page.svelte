@@ -135,10 +135,9 @@
 				{/each}
 			</div>
 
-			<!-- Start Another Workout Button -->
-			<Button variant="primary" size="lg" fullWidth on:click={handleStartWorkout}>
-				<AddIcon size={24} />
-				Start Another Workout
+			<!-- Return to Home Button -->
+			<Button variant="primary" size="lg" fullWidth on:click={() => todayWorkout = null}>
+				Return to Home
 			</Button>
 		</div>
 	{/if}

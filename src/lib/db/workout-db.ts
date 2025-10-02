@@ -91,3 +91,23 @@ export async function getWorkoutsByDateRange(startDate: Date, endDate: Date): Pr
 export async function deleteWorkout(id: string): Promise<void> {
 	await db.workouts.delete(id);
 }
+
+// Delete exercise from workout
+export async function deleteExerciseFromWorkout(workoutId: string, exerciseId: string): Promise<void> {
+	const workout = await db.workouts.get(workoutId);
+	if (!workout) return;
+
+	workout.exercises = workout.exercises.filter((ex) => ex.id !== exerciseId);
+
+	// If no exercises left, delete the entire workout
+	if (workout.exercises.length === 0) {
+		await deleteWorkout(workoutId);
+	} else {
+		await db.workouts.update(workoutId, { exercises: workout.exercises });
+	}
+}
+
+// Delete all workouts
+export async function deleteAllWorkouts(): Promise<void> {
+	await db.workouts.clear();
+}

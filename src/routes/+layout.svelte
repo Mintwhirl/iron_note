@@ -34,6 +34,11 @@
 			<span>History</span>
 		</a>
 	</nav>
+
+	<footer class="app-footer">
+		<p>Made by Kevin Stewart © 2025</p>
+		<p class="privacy-note">All data stored locally on your device • Nothing collected or transmitted</p>
+	</footer>
 </div>
 
 <style>
@@ -88,5 +93,30 @@
 	.nav-item:not(.active):hover {
 		color: var(--text-primary);
 		background: var(--bg-tertiary);
+	}
+
+	.app-footer {
+		position: fixed;
+		bottom: 80px;
+		left: 0;
+		right: 0;
+		padding: var(--space-sm) var(--space-md);
+		text-align: center;
+		background: transparent;
+		pointer-events: none;
+		z-index: 50;
+	}
+
+	.app-footer p {
+		margin: 0;
+		font-size: 0.625rem;
+		color: var(--text-tertiary);
+		opacity: 0.6;
+		line-height: 1.4;
+	}
+
+	.privacy-note {
+		font-size: 0.5625rem;
+		margin-top: 2px;
 	}
 </style>
