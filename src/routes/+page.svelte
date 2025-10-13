@@ -165,7 +165,11 @@
 			</div>
 
 			<!-- Return to Home Button -->
-			<Button variant="primary" size="lg" fullWidth on:click={() => todayWorkout = null}>
+			<Button variant="primary" size="lg" fullWidth on:click={async () => {
+				todayWorkout = null;
+				await new Promise(resolve => setTimeout(resolve, 0));
+				todayWorkout = await getTodayWorkout();
+			}}>
 				Return to Home
 			</Button>
 		</div>
@@ -206,22 +210,24 @@
 		{#if $workoutStore.isLogging}
 			<SetLogger onFinishExercise={handleFinishExercise} />
 		{:else}
-			<div class="workout-actions">
-				<button class="add-exercise-btn" on:click={() => workoutStore.startExercise(null)}>
-					<AddIcon size={32} />
-					<span>Add Exercise</span>
-				</button>
-				<Button variant="secondary" size="lg" fullWidth on:click={handleEndWorkout}>
-					End Workout
-				</Button>
-			</div>
+			{#if !hasCompletedExercises}
+				<div class="workout-actions">
+					<button class="add-exercise-btn" on:click={() => workoutStore.startExercise(null)}>
+						<AddIcon size={32} />
+						<span>Add Exercise</span>
+					</button>
+				</div>
+			{/if}
 
 			{#if $workoutStore.currentExercise === null && !$workoutStore.isLogging}
-				<div class="exercise-selector-wrapper">
-					<button class="back-btn" on:click={() => workoutStore.reset()} aria-label="Go back">
-						<ChevronIcon size={24} direction="left" />
-					</button>
-					<ExerciseSelector onSelectExercise={handleSelectExercise} />
+				<ExerciseSelector onSelectExercise={handleSelectExercise} />
+			{/if}
+
+			{#if hasCompletedExercises}
+				<div class="end-workout-section">
+					<Button variant="secondary" size="lg" fullWidth on:click={handleEndWorkout}>
+						End Workout
+					</Button>
 				</div>
 			{/if}
 		{/if}
@@ -495,31 +501,8 @@
 		transform: translateY(0) scale(0.98);
 	}
 
-	.exercise-selector-wrapper {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-md);
-	}
-
-	.exercise-selector-wrapper .back-btn {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 40px;
-		height: 40px;
-		border-radius: var(--radius-md);
-		color: var(--text-secondary);
-		transition: all 0.15s ease;
-		align-self: flex-start;
-		-webkit-tap-highlight-color: transparent;
-	}
-
-	.exercise-selector-wrapper .back-btn:hover {
-		background: var(--bg-tertiary);
-		color: var(--text-primary);
-	}
-
-	.exercise-selector-wrapper .back-btn:active {
-		transform: scale(0.95);
+	.end-workout-section {
+		padding-top: var(--space-lg);
+		border-top: 1px solid var(--border-primary);
 	}
 </style>
