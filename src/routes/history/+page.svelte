@@ -6,6 +6,7 @@
 	import WorkoutCard from '$lib/components/history/WorkoutCard.svelte';
 	import WorkoutDetails from '$lib/components/history/WorkoutDetails.svelte';
 	import DeleteAllConfirmation from '$lib/components/common/DeleteAllConfirmation.svelte';
+	import ExportFilenameModal from '$lib/components/common/ExportFilenameModal.svelte';
 	import Button from '$lib/components/common/Button.svelte';
 	import DownloadIcon from '$lib/components/icons/DownloadIcon.svelte';
 	import TrashIcon from '$lib/components/icons/TrashIcon.svelte';
@@ -14,6 +15,7 @@
 	let selectedWorkout: Workout | null = null;
 	let showDetails = false;
 	let showDeleteAllConfirmation = false;
+	let showExportModal = false;
 
 	onMount(async () => {
 		workouts = await getAllWorkouts();
@@ -47,10 +49,19 @@
 		}
 	}
 
-	function handleExportAll() {
+	function handleExportAllClick() {
 		if (workouts.length > 0) {
-			exportAllWorkoutsToCSV(workouts);
+			showExportModal = true;
 		}
+	}
+
+	function handleExportAll(filename: string) {
+		exportAllWorkoutsToCSV(workouts, filename);
+		showExportModal = false;
+	}
+
+	function handleExportCancel() {
+		showExportModal = false;
 	}
 
 	function handleDeleteAllClick() {
@@ -79,7 +90,7 @@
 
 	{#if hasWorkouts}
 		<div class="header-actions">
-			<Button variant="secondary" size="sm" on:click={handleExportAll}>
+			<Button variant="secondary" size="sm" on:click={handleExportAllClick}>
 				<DownloadIcon size={18} />
 				<span class="button-text">Export All</span>
 			</Button>
@@ -117,6 +128,13 @@
 	isOpen={showDeleteAllConfirmation}
 	onConfirm={confirmDeleteAll}
 	onCancel={cancelDeleteAll}
+/>
+
+<ExportFilenameModal
+	isOpen={showExportModal}
+	defaultFilename={`iron-note-all-workouts-${new Date().getTime()}`}
+	onExport={handleExportAll}
+	onCancel={handleExportCancel}
 />
 
 <style>

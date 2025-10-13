@@ -1,37 +1,38 @@
-# 💪 Iron Note – Lightweight iOS-First Gym Tracker
+# Iron Note – Lightweight iOS-First Gym Tracker
 
-A **minimal, fast, offline-first PWA** for tracking workouts at the gym. Built for real-world use with one-handed operation, dark mode, and zero bloat.
+A minimal, fast, offline-first PWA for tracking workouts at the gym. Built for real-world use with one-handed operation, dark mode, and zero bloat.
 
 ![Status](https://img.shields.io/badge/status-production-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 ---
 
-## ✨ Features
+## Features
 
 ### Core Functionality
-- ✅ **Start/End Workout Sessions** – Track multiple workouts per day
-- ✅ **Exercise Library** – 47 pre-populated exercises across 5 categories (Chest, Back, Shoulders, Legs, Core)
-- ✅ **Set Logging** – Log 1-5 sets per exercise with reps + weight (lbs)
-- ✅ **Optional Notes** – Add notes per exercise after completion
-- ✅ **Workout History** – View past workouts by date with detailed breakdowns
-- ✅ **CSV Export** – Export individual or all workouts
-- ✅ **Completion Summary** – Stats and review after ending a workout
-- ✅ **Delete Individual Exercises** – Tap any exercise in history to delete it
-- ✅ **Delete All Workouts** – Clear entire history with type-to-confirm + 5-tap verification
-- ✅ **Privacy First** – All data stored locally, nothing collected or transmitted
+- Start/End Workout Sessions – Track multiple workouts per day
+- Exercise Library – 47 pre-populated exercises across 5 categories (Chest, Back, Shoulders, Legs, Core)
+- Set Logging – Log 1-5 sets per exercise with reps + weight (lbs)
+- Optional Notes – Add notes per exercise after completion
+- Workout History – View past workouts by date with detailed breakdowns
+- CSV Export – Export individual or all workouts with custom filenames
+- Completion Summary – Stats and review after ending a workout
+- Delete Individual Sets – Remove specific sets during exercise logging
+- Delete Individual Exercises – Remove exercises from active workout or history
+- Delete All Workouts – Clear entire history with type-to-confirm and 5-tap verification
+- Privacy First – All data stored locally, nothing collected or transmitted
 
 ### Design Principles
-- 🎨 **Dark Mode Default** – Optimized for gym lighting
-- 📱 **iOS-First PWA** – Installable on iPhone home screen
-- 👍 **Right-Hand Optimized** – Bottom nav for one-handed use
-- 🚀 **Offline-First** – Works without internet (IndexedDB)
-- ⚡ **Lightweight** – ~33KB gzipped bundle
-- 🎯 **Zero Bloat** – No login, no ads, no gamification
+- Dark Mode Default – Optimized for gym lighting
+- iOS-First PWA – Installable on iPhone home screen
+- Right-Hand Optimized – Bottom nav for one-handed use
+- Offline-First – Works without internet (IndexedDB)
+- Lightweight – ~33KB gzipped bundle
+- Zero Bloat – No login, no ads, no gamification
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 | Layer | Technology | Why |
 |-------|-----------|-----|
@@ -45,7 +46,7 @@ A **minimal, fast, offline-first PWA** for tracking workouts at the gym. Built f
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 iron_note/
@@ -92,7 +93,7 @@ iron_note/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js 18+
@@ -120,7 +121,7 @@ npm run preview
 
 ---
 
-## 📱 Usage
+## Usage
 
 ### Workflow
 
@@ -157,7 +158,7 @@ npm run preview
 
 ---
 
-## 🎯 Design Decisions
+## Design Decisions
 
 ### Why Svelte/SvelteKit?
 - **Performance**: Compiles to vanilla JS, no virtual DOM overhead
@@ -184,7 +185,7 @@ Gym environments typically have bright overhead lighting. Dark mode reduces glar
 
 ---
 
-## 📊 Performance
+## Performance
 
 - **Bundle Size**: ~238KB total, ~33KB gzipped
 - **First Load**: < 1s on 3G
@@ -193,7 +194,7 @@ Gym environments typically have bright overhead lighting. Dark mode reduces glar
 
 ---
 
-## 🔮 Future Enhancements (Maybe)
+## Future Enhancements (Maybe)
 
 - [ ] Progressive overload tracking (weight progression over time)
 - [ ] Custom exercise creation
@@ -204,7 +205,7 @@ Gym environments typically have bright overhead lighting. Dark mode reduces glar
 
 ---
 
-## 🐛 Known Issues
+## Known Issues
 
 - PWA icons are currently placeholders (need proper 192x192 and 512x512 PNGs)
 - No data migration strategy yet (if schema changes)
@@ -212,19 +213,19 @@ Gym environments typically have bright overhead lighting. Dark mode reduces glar
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 This is a personal project, but suggestions are welcome! Open an issue or submit a PR.
 
 ---
 
-## 📄 License
+## License
 
 MIT License - See [LICENSE](LICENSE) for details
 
 ---
 
-## 🙏 Credits
+## Credits
 
 Built with:
 - [SvelteKit](https://kit.svelte.dev/)
@@ -232,12 +233,12 @@ Built with:
 - [Vite PWA Plugin](https://vite-pwa-org.netlify.app/)
 - [date-fns](https://date-fns.org/)
 
-**Developed by Claude Code** 🤖
+Developed by Claude Code
 [Claude Code Documentation](https://docs.claude.com/en/docs/claude-code)
 
 ---
 
-## 📞 Support
+## Support
 
 For issues or questions:
 - Open an issue on [GitHub](https://github.com/Mintwhirl/iron_note/issues)
@@ -245,11 +246,11 @@ For issues or questions:
 
 ---
 
-## 🔒 Privacy
+## Privacy
 
 All data is stored locally on your device using IndexedDB. **Nothing is collected, transmitted, or stored on external servers.** Your workout data never leaves your phone.
 
 ---
 
-**Made by Kevin Stewart © 2025**
-**Built with 💪 for real gym use.**
+Made by Kevin Stewart © 2025
+Built for real gym use.

@@ -3,6 +3,7 @@
 	import Modal from '../common/Modal.svelte';
 	import Button from '../common/Button.svelte';
 	import DeleteExerciseConfirmation from '../common/DeleteExerciseConfirmation.svelte';
+	import ExportFilenameModal from '../common/ExportFilenameModal.svelte';
 	import DownloadIcon from '../icons/DownloadIcon.svelte';
 	import { exportWorkoutToCSV } from '$lib/utils/export';
 	import { deleteExerciseFromWorkout } from '$lib/db/workout-db';
@@ -15,9 +16,19 @@
 	let showDeleteConfirmation = false;
 	let selectedExerciseId = '';
 	let selectedExerciseName = '';
+	let showExportModal = false;
 
-	function handleExport() {
-		exportWorkoutToCSV(workout);
+	function handleExportClick() {
+		showExportModal = true;
+	}
+
+	function handleExport(filename: string) {
+		exportWorkoutToCSV(workout, filename);
+		showExportModal = false;
+	}
+
+	function handleExportCancel() {
+		showExportModal = false;
 	}
 
 	function handleExerciseClick(exerciseId: string, exerciseName: string) {
@@ -80,7 +91,7 @@
 		{/each}
 
 		<div class="export-section">
-			<Button variant="secondary" size="lg" fullWidth on:click={handleExport}>
+			<Button variant="secondary" size="lg" fullWidth on:click={handleExportClick}>
 				<DownloadIcon size={20} />
 				Export to CSV
 			</Button>
@@ -93,6 +104,13 @@
 	exerciseName={selectedExerciseName}
 	onConfirm={confirmDeleteExercise}
 	onCancel={cancelDeleteExercise}
+/>
+
+<ExportFilenameModal
+	isOpen={showExportModal}
+	defaultFilename={`iron-note-${workout.date.replace(/\//g, '-')}`}
+	onExport={handleExport}
+	onCancel={handleExportCancel}
 />
 
 <style>

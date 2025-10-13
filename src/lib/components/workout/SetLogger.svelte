@@ -2,6 +2,8 @@
 	import { workoutStore, isSetLogged, getSetData } from '$lib/stores/workout';
 	import Button from '../common/Button.svelte';
 	import CheckIcon from '../icons/CheckIcon.svelte';
+	import ChevronIcon from '../icons/ChevronIcon.svelte';
+	import TrashIcon from '../icons/TrashIcon.svelte';
 
 	export let onFinishExercise: () => void;
 
@@ -50,6 +52,9 @@
 
 <div class="set-logger">
 	<div class="exercise-header">
+		<button class="back-btn" on:click={() => workoutStore.reset()} aria-label="Go back">
+			<ChevronIcon size={24} direction="left" />
+		</button>
 		<div class="exercise-info">
 			<span class="category">{$workoutStore.currentExercise?.category}</span>
 			<h2 class="exercise-name">{$workoutStore.currentExercise?.name}</h2>
@@ -59,23 +64,34 @@
 	<!-- Set buttons -->
 	<div class="set-buttons">
 		{#each setNumbers as setNum}
-			<button
-				class="set-btn"
-				class:active={activeSet === setNum}
-				class:logged={$isSetLogged(setNum)}
-				on:click={() => handleSetClick(setNum)}
-			>
-				{#if $isSetLogged(setNum) && activeSet !== setNum}
-					<CheckIcon size={20} color="var(--success)" />
-				{/if}
-				<span class="set-number">Set {setNum}</span>
-				{#if $isSetLogged(setNum)}
-					{@const data = $getSetData(setNum)}
-					{#if data}
-						<span class="set-details">{data.reps} × {data.weight} lbs</span>
+			<div class="set-btn-wrapper">
+				<button
+					class="set-btn"
+					class:active={activeSet === setNum}
+					class:logged={$isSetLogged(setNum)}
+					on:click={() => handleSetClick(setNum)}
+				>
+					{#if $isSetLogged(setNum) && activeSet !== setNum}
+						<CheckIcon size={20} color="var(--success)" />
 					{/if}
+					<span class="set-number">Set {setNum}</span>
+					{#if $isSetLogged(setNum)}
+						{@const data = $getSetData(setNum)}
+						{#if data}
+							<span class="set-details">{data.reps} × {data.weight} lbs</span>
+						{/if}
+					{/if}
+				</button>
+				{#if $isSetLogged(setNum)}
+					<button
+						class="delete-set-btn"
+						on:click={() => workoutStore.removeSet(setNum)}
+						aria-label="Delete set {setNum}"
+					>
+						<TrashIcon size={16} />
+					</button>
 				{/if}
-			</button>
+			</div>
 		{/each}
 	</div>
 
@@ -136,14 +152,37 @@
 
 	.exercise-header {
 		display: flex;
-		flex-direction: column;
-		gap: var(--space-sm);
+		align-items: flex-start;
+		gap: var(--space-md);
+	}
+
+	.back-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		border-radius: var(--radius-md);
+		color: var(--text-secondary);
+		transition: all 0.15s ease;
+		flex-shrink: 0;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	.back-btn:hover {
+		background: var(--bg-tertiary);
+		color: var(--text-primary);
+	}
+
+	.back-btn:active {
+		transform: scale(0.95);
 	}
 
 	.exercise-info {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xs);
+		flex: 1;
 	}
 
 	.category {
@@ -167,6 +206,13 @@
 		gap: var(--space-sm);
 	}
 
+	.set-btn-wrapper {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
+	}
+
 	.set-btn {
 		display: flex;
 		align-items: center;
@@ -181,6 +227,7 @@
 		min-height: 72px;
 		text-align: left;
 		transition: all 0.15s ease;
+		flex: 1;
 	}
 
 	.set-btn:hover {
@@ -211,6 +258,28 @@
 		font-size: 1rem;
 		color: var(--text-secondary);
 		font-weight: 500;
+	}
+
+	.delete-set-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 48px;
+		height: 72px;
+		border-radius: var(--radius-lg);
+		color: var(--text-tertiary);
+		transition: all 0.15s ease;
+		flex-shrink: 0;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	.delete-set-btn:hover {
+		background: var(--bg-tertiary);
+		color: var(--error);
+	}
+
+	.delete-set-btn:active {
+		transform: scale(0.9);
 	}
 
 	.input-form {

@@ -1,6 +1,6 @@
 import type { Workout } from '$lib/types';
 
-export function exportWorkoutToCSV(workout: Workout): void {
+export function exportWorkoutToCSV(workout: Workout, filename?: string): void {
 	// CSV Header
 	const headers = ['Date', 'Exercise', 'Category', 'Set', 'Reps', 'Weight (lbs)', 'Notes'];
 
@@ -29,8 +29,11 @@ export function exportWorkoutToCSV(workout: Workout): void {
 	const link = document.createElement('a');
 	const url = URL.createObjectURL(blob);
 
+	const defaultFilename = `iron-note-${workout.date.replace(/\//g, '-')}`;
+	const finalFilename = filename || defaultFilename;
+
 	link.setAttribute('href', url);
-	link.setAttribute('download', `iron-note-${workout.date.replace(/\//g, '-')}.csv`);
+	link.setAttribute('download', `${finalFilename}.csv`);
 	link.style.visibility = 'hidden';
 	document.body.appendChild(link);
 	link.click();
@@ -38,7 +41,7 @@ export function exportWorkoutToCSV(workout: Workout): void {
 	URL.revokeObjectURL(url);
 }
 
-export function exportAllWorkoutsToCSV(workouts: Workout[]): void {
+export function exportAllWorkoutsToCSV(workouts: Workout[], filename?: string): void {
 	// CSV Header
 	const headers = ['Date', 'Exercise', 'Category', 'Set', 'Reps', 'Weight (lbs)', 'Notes'];
 
@@ -69,8 +72,11 @@ export function exportAllWorkoutsToCSV(workouts: Workout[]): void {
 	const link = document.createElement('a');
 	const url = URL.createObjectURL(blob);
 
+	const defaultFilename = `iron-note-all-workouts-${new Date().getTime()}`;
+	const finalFilename = filename || defaultFilename;
+
 	link.setAttribute('href', url);
-	link.setAttribute('download', `iron-note-all-workouts-${new Date().getTime()}.csv`);
+	link.setAttribute('download', `${finalFilename}.csv`);
 	link.style.visibility = 'hidden';
 	document.body.appendChild(link);
 	link.click();

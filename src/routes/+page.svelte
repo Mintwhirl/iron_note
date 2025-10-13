@@ -10,9 +10,16 @@
 	import Button from '$lib/components/common/Button.svelte';
 	import AddIcon from '$lib/components/icons/AddIcon.svelte';
 	import CheckIcon from '$lib/components/icons/CheckIcon.svelte';
+	import ChevronIcon from '$lib/components/icons/ChevronIcon.svelte';
+	import TrashIcon from '$lib/components/icons/TrashIcon.svelte';
+	import DeleteExerciseConfirmation from '$lib/components/common/DeleteExerciseConfirmation.svelte';
+	import { deleteExerciseFromWorkout } from '$lib/db/workout-db';
 
 	let todayWorkout: Workout | null = null;
 	let showNotesModal = false;
+	let showDeleteExerciseConfirmation = false;
+	let selectedExerciseToDelete = '';
+	let selectedExerciseNameToDelete = '';
 
 	onMount(async () => {
 		todayWorkout = await getTodayWorkout();
@@ -78,6 +85,28 @@
 
 		workoutStore.reset();
 		showNotesModal = false;
+	}
+
+	function handleDeleteExerciseClick(exerciseId: string, exerciseName: string) {
+		selectedExerciseToDelete = exerciseId;
+		selectedExerciseNameToDelete = exerciseName;
+		showDeleteExerciseConfirmation = true;
+	}
+
+	async function confirmDeleteExercise() {
+		if (todayWorkout && selectedExerciseToDelete) {
+			await deleteExerciseFromWorkout(todayWorkout.id, selectedExerciseToDelete);
+			todayWorkout = await getTodayWorkout();
+			showDeleteExerciseConfirmation = false;
+			selectedExerciseToDelete = '';
+			selectedExerciseNameToDelete = '';
+		}
+	}
+
+	function cancelDeleteExercise() {
+		showDeleteExerciseConfirmation = false;
+		selectedExerciseToDelete = '';
+		selectedExerciseNameToDelete = '';
 	}
 
 	$: hasCompletedExercises = todayWorkout && todayWorkout.exercises.length > 0;
@@ -159,6 +188,13 @@
 									</span>
 								</div>
 								<span class="category-badge">{exercise.category}</span>
+								<button
+									class="delete-exercise-btn"
+									on:click={() => handleDeleteExerciseClick(exercise.id, exercise.exerciseName)}
+									aria-label="Delete {exercise.exerciseName}"
+								>
+									<TrashIcon size={18} />
+								</button>
 							</div>
 						</Card>
 					{/each}
@@ -181,7 +217,12 @@
 			</div>
 
 			{#if $workoutStore.currentExercise === null && !$workoutStore.isLogging}
-				<ExerciseSelector onSelectExercise={handleSelectExercise} />
+				<div class="exercise-selector-wrapper">
+					<button class="back-btn" on:click={() => workoutStore.reset()} aria-label="Go back">
+						<ChevronIcon size={24} direction="left" />
+					</button>
+					<ExerciseSelector onSelectExercise={handleSelectExercise} />
+				</div>
 			{/if}
 		{/if}
 	{/if}
@@ -192,6 +233,14 @@
 		exerciseName={$workoutStore.currentExercise?.name || ''}
 		onSave={handleSaveNotes}
 		onSkip={handleSkipNotes}
+	/>
+
+	<!-- Delete exercise confirmation -->
+	<DeleteExerciseConfirmation
+		isOpen={showDeleteExerciseConfirmation}
+		exerciseName={selectedExerciseNameToDelete}
+		onConfirm={confirmDeleteExercise}
+		onCancel={cancelDeleteExercise}
 	/>
 </div>
 
@@ -277,6 +326,28 @@
 		border-radius: var(--radius-sm);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
+	}
+
+	.delete-exercise-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+		border-radius: var(--radius-md);
+		color: var(--text-tertiary);
+		transition: all 0.15s ease;
+		flex-shrink: 0;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	.delete-exercise-btn:hover {
+		background: var(--bg-tertiary);
+		color: var(--error);
+	}
+
+	.delete-exercise-btn:active {
+		transform: scale(0.95);
 	}
 
 	/* Start Workout Section */
@@ -422,5 +493,33 @@
 
 	.add-exercise-btn:active {
 		transform: translateY(0) scale(0.98);
+	}
+
+	.exercise-selector-wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-md);
+	}
+
+	.exercise-selector-wrapper .back-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		border-radius: var(--radius-md);
+		color: var(--text-secondary);
+		transition: all 0.15s ease;
+		align-self: flex-start;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	.exercise-selector-wrapper .back-btn:hover {
+		background: var(--bg-tertiary);
+		color: var(--text-primary);
+	}
+
+	.exercise-selector-wrapper .back-btn:active {
+		transform: scale(0.95);
 	}
 </style>
