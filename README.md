@@ -12,6 +12,8 @@ A minimal, fast, offline-first PWA for tracking workouts at the gym. Built for r
 ### Core Functionality
 - Start/End Workout Sessions – Track multiple workouts per day
 - Exercise Library – 47 pre-populated exercises across 5 categories (Chest, Back, Shoulders, Legs, Core)
+- Custom Exercises – Create and save your own exercises
+- Recent Exercises – Quick-add exercises from your last 3 workouts
 - Set Logging – Log 1-5 sets per exercise with reps + weight (lbs)
 - Optional Notes – Add notes per exercise after completion
 - Workout History – View past workouts by date with detailed breakdowns
@@ -252,5 +254,5 @@ All data is stored locally on your device using IndexedDB. **Nothing is collecte
 
 ---
 
-Made by Kevin Stewart © 2025
+Made by MintWhirl © 2025
 Built for real gym use.

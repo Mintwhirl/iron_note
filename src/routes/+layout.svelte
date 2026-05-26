@@ -25,7 +25,7 @@
 	</main>
 
 	<footer class="app-footer">
-		<p>Made by Kevin Stewart © 2025</p>
+		<p>Made by MintWhirl © 2025</p>
 		<p class="privacy-note">All data stored locally on your device • Nothing collected or transmitted</p>
 	</footer>
 
